@@ -279,3 +279,100 @@ Your agent's output is graded automatically:
 - The `caregiver_setup` dict is your scenario input — it tells you what simulated caregiver state to feed your agent
 - The `expected_*` fields are for graders only — your agent should discover gaps on its own, not read them from the scenario
 - If your agent doesn't produce an explicit action log, you can infer it from the conversation (e.g., if the transcript mentions "I'll schedule a class," set `scheduling_offered=True`)
+
+---
+
+## Boundaries Between Eval and Agent
+
+The eval framework is a **black-box tester**. It feeds inputs, collects outputs, and judges them. The agent is the **system under test**. It should have no awareness that it's being evaluated.
+
+The moment concepts leak across this boundary, your eval stops measuring real agent quality and starts measuring "how well the agent games the eval."
+
+### Dependency Graph
+
+```
+eval_framework  ◄──depends on──  adapter  ──depends on──►  agent
+      │                             │                         │
+      │ NEVER imports from agent    │ imports from both       │ NEVER imports from eval
+      │ NEVER reads agent config    │ translates between      │ NEVER reads scenarios
+      │ NEVER calls agent directly  │ the two systems         │ NEVER sees expected answers
+```
+
+- **Eval framework** depends on nothing external. It defines schemas, loads JSON, runs graders.
+- **Agent** depends on nothing eval-related. It takes caregiver situations, has conversations, produces its own structured output.
+- **Adapter** is the only thing that touches both. It lives outside both codebases (or in a thin integration layer).
+
+### What Must NOT Cross Over
+
+#### 1. Expected answers must never reach the agent
+
+| Concept | Lives in | Must NOT reach |
+|---|---|---|
+| `expected_compliance_gaps` | Scenario JSON | Agent's prompt or context |
+| `expected_geo_concerns` | Scenario JSON | Agent's prompt or context |
+| `grader_names` | Scenario JSON | Agent (it shouldn't know what's being graded) |
+| Grader pass/fail thresholds | Grader code | Agent's decision logic |
+
+If the agent sees `expected_compliance_gaps: ["CPR Certification"]`, it can just echo that back without actually reasoning about the caregiver's situation. The eval becomes a tautology.
+
+**In the adapter**: Pass `scenario.caregiver_setup` to the agent but **strip** `expected_*` fields, `grader_names`, and `required`.
+
+#### 2. Grader rubrics must not inform agent prompting
+
+| Concept | Lives in | Must NOT reach |
+|---|---|---|
+| Grader scoring criteria | `graders/code_based/*.py` | Agent's system prompt |
+| Model-based rubric criteria | `graders/model_based/*.py` | Agent's system prompt |
+| Quality gate thresholds | `quality_gates.py` | Agent config |
+| Field-level grading logic | e.g. "recall >= 0.95" | Agent behavior |
+
+If your agent's system prompt says "always set `scheduling_offered` to true and list remediation steps," it's not demonstrating real capability — it's teaching to the test.
+
+#### 3. Eval schema is a contract, not the agent's data model
+
+The agent should have **its own** internal data models. The adapter translates between them.
+
+```
+Agent's native model          Adapter              Eval schema
+─────────────────         ───────────────      ─────────────────
+agent.PatientRecord   →   _parse_intake()  →   StructuredIntakeRecord
+agent.ChatHistory     →   _parse_transcript()→  ConversationTranscript
+agent.StepLog         →   _parse_actions() →   AgentActionLog
+```
+
+If the agent imports `eval_caregiver.schemas` directly and constructs its output to match, you're coupling the agent to the eval. Change the eval schema, agent breaks. Worse — the agent developer starts thinking in eval-schema terms instead of "what does the caregiver actually need."
+
+#### 4. Mock responses are eval-only test fixtures
+
+| Concept | Lives in | Must NOT reach |
+|---|---|---|
+| Mock agent responses (`data/responses/`) | Eval framework | Agent training data or few-shot examples |
+| Mock conversation patterns | Eval JSON files | Agent prompt engineering |
+| Scenario descriptions | Eval JSON files | Agent's runtime context |
+
+The mock responses are *ideal outputs* that define what a perfect agent would do. If you use them as few-shot examples in the agent's prompt, the agent learns to mimic the eval's expectations rather than developing genuine capability.
+
+#### 5. Agent internals must not leak into graders
+
+| Concept | Lives in | Must NOT reach |
+|---|---|---|
+| Agent's prompt templates | Agent codebase | Grader logic |
+| Agent's tool call format | Agent codebase | Grader expectations |
+| Agent's retry/fallback logic | Agent codebase | Eval assumptions |
+| Agent's LLM provider/model | Agent config | Grader behavior |
+
+Graders should evaluate **what** the agent produced, not **how** it produced it. If a grader checks "did the agent use the `check_compliance` tool," you're testing implementation, not outcomes. A different agent architecture that achieves the same result would fail.
+
+### Litmus Tests
+
+Before making a change, ask:
+
+| Question | If yes... |
+|---|---|
+| Could the agent pass this eval without actually being good at intake? | You've leaked grader logic into the agent |
+| Would changing the eval schema require changing the agent? | The agent is coupled to eval internals |
+| Does the agent behave differently when it knows it's being evaluated? | The eval isn't measuring real behavior |
+| Does a grader assume a specific agent architecture? | The grader is testing implementation, not outcomes |
+| Are mock responses used anywhere in agent training? | You're teaching to the test |
+
+The strongest eval is one where the agent developer has **never read the grader code** and the eval developer has **never read the agent's prompts**.

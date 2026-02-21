@@ -10,6 +10,118 @@
     <install>Add eval-caregiver as a dependency (git repo or local path)</install>
   </eval_framework>
 
+  <!-- ================================================================
+       BOUNDARIES — read this section BEFORE writing any code.
+       These rules ensure the eval measures real agent quality,
+       not how well the agent games the eval.
+       ================================================================ -->
+  <boundaries>
+    <principle>
+      The eval framework is a black-box tester. The agent is the system under test.
+      The adapter is the ONLY component that touches both. The agent must have no
+      awareness that it is being evaluated.
+    </principle>
+
+    <dependency_rule>
+      eval_framework ◄── adapter ──► agent
+
+      - The eval framework NEVER imports from the agent codebase.
+      - The agent NEVER imports from the eval framework.
+      - The adapter imports from both and translates between them.
+    </dependency_rule>
+
+    <forbidden_crossovers>
+      <rule id="B1" severity="critical" name="no_expected_answers_to_agent">
+        <what>expected_compliance_gaps, expected_geo_concerns, grader_names, required</what>
+        <from>Scenario JSON / TestScenario</from>
+        <must_not_reach>Agent's prompt, context, input, or any runtime state</must_not_reach>
+        <why>
+          If the agent sees expected answers, it can echo them back without reasoning.
+          The eval becomes a tautology.
+        </why>
+        <enforcement>
+          The adapter's _build_agent_input() must pass ONLY scenario.caregiver_setup
+          (and optionally scenario.description) to the agent. It must NEVER pass
+          expected_compliance_gaps, expected_geo_concerns, grader_names, or required.
+        </enforcement>
+      </rule>
+
+      <rule id="B2" severity="critical" name="no_grader_logic_in_agent">
+        <what>Grader scoring criteria, rubrics, pass/fail thresholds, quality gate thresholds</what>
+        <from>graders/code_based/*.py, graders/model_based/*.py, quality_gates.py</from>
+        <must_not_reach>Agent's system prompt, decision logic, or configuration</must_not_reach>
+        <why>
+          If the agent's prompt says "always set scheduling_offered=True" or
+          "list remediation steps," it's teaching to the test, not demonstrating
+          real capability.
+        </why>
+        <enforcement>
+          The agent's prompts and instructions must be written to serve caregivers,
+          not to satisfy grader field checks. Never reference grader names, scoring
+          weights, or threshold values in agent code.
+        </enforcement>
+      </rule>
+
+      <rule id="B3" severity="high" name="eval_schema_is_not_agent_data_model">
+        <what>eval_caregiver.schemas.* (StructuredIntakeRecord, AgentActionLog, etc.)</what>
+        <from>Eval framework</from>
+        <must_not_reach>Agent's internal data model or runtime imports</must_not_reach>
+        <why>
+          If the agent constructs eval schema objects directly, it couples the agent
+          to the eval. Changing the eval schema breaks the agent. The agent developer
+          starts thinking in eval terms instead of caregiver terms.
+        </why>
+        <enforcement>
+          The agent must use its own native data models. The adapter translates:
+            agent.PatientRecord  →  _parse_intake()    →  StructuredIntakeRecord
+            agent.ChatHistory    →  _parse_transcript() →  ConversationTranscript
+            agent.StepLog        →  _parse_actions()    →  AgentActionLog
+        </enforcement>
+      </rule>
+
+      <rule id="B4" severity="high" name="no_mock_responses_in_agent">
+        <what>Mock agent responses (data/responses/*.json), mock conversation patterns</what>
+        <from>Eval framework data/ directory</from>
+        <must_not_reach>Agent training data, few-shot examples, or prompt engineering</must_not_reach>
+        <why>
+          Mock responses are ideal outputs that define what a perfect agent would do.
+          Using them as few-shot examples makes the agent mimic eval expectations
+          rather than developing genuine capability.
+        </why>
+        <enforcement>
+          Never read data/responses/ from the agent codebase. Never copy mock
+          conversation patterns into agent prompts.
+        </enforcement>
+      </rule>
+
+      <rule id="B5" severity="high" name="no_agent_internals_in_graders">
+        <what>Agent's prompt templates, tool call format, retry logic, LLM provider/model</what>
+        <from>Agent codebase</from>
+        <must_not_reach>Grader logic or eval framework assumptions</must_not_reach>
+        <why>
+          Graders must evaluate WHAT the agent produced, not HOW it produced it.
+          If a grader checks "did the agent use the check_compliance tool," a
+          different agent architecture that achieves the same result would fail.
+        </why>
+        <enforcement>
+          Graders read only the three AgentOutput fields (transcript, intake_record,
+          action_log). Never add grader logic that depends on agent implementation details.
+        </enforcement>
+      </rule>
+    </forbidden_crossovers>
+
+    <litmus_tests>
+      <test>Could the agent pass this eval without actually being good at intake? → You've leaked grader logic into the agent.</test>
+      <test>Would changing the eval schema require changing the agent? → The agent is coupled to eval internals.</test>
+      <test>Does the agent behave differently when it knows it's being evaluated? → The eval isn't measuring real behavior.</test>
+      <test>Does a grader assume a specific agent architecture? → The grader is testing implementation, not outcomes.</test>
+      <test>Are mock responses used anywhere in agent training? → You're teaching to the test.</test>
+    </litmus_tests>
+  </boundaries>
+
+  <!-- ================================================================
+       ADAPTER — the bridge between the two systems.
+       ================================================================ -->
   <adapter>
     <class_name>LiveIntakeAgent</class_name>
     <base_class>eval_caregiver.agent.base.AgentBase</base_class>
@@ -32,6 +144,10 @@
               {"desired_hourly_rate": 32, "minimum_weekly_hours": 35}
           </field>
         </input>
+        <boundary_check ref="B1">
+          ONLY pass caregiver_setup (and optionally description) to the agent.
+          STRIP: expected_compliance_gaps, expected_geo_concerns, grader_names, required.
+        </boundary_check>
       </step>
 
       <step order="2" name="invoke_agent">
@@ -39,10 +155,21 @@
           Call our existing agent with the scenario setup to produce a real conversation.
           Map scenario.caregiver_setup into whatever input format our agent expects.
         </description>
+        <boundary_check ref="B3">
+          The agent must use its own native input format, not eval schemas.
+          The adapter translates caregiver_setup into the agent's expected format.
+        </boundary_check>
       </step>
 
       <step order="3" name="map_outputs">
-        <description>Parse the agent's native output into the three required eval objects.</description>
+        <description>
+          Parse the agent's NATIVE output into the three required eval objects.
+          This is a pure translation layer — never modify the agent to emit eval schemas directly.
+        </description>
+        <boundary_check ref="B3">
+          Translate from agent-native models to eval schemas. The agent must not
+          import or construct eval_caregiver.schemas objects itself.
+        </boundary_check>
 
         <output name="ConversationTranscript">
           <module>eval_caregiver.schemas.conversation</module>
@@ -103,10 +230,17 @@
     </pipeline>
   </adapter>
 
+  <!-- ================================================================
+       GRADER CONTRACTS — what each grader reads from AgentOutput.
+       This section is for the ADAPTER DEVELOPER only.
+       Never expose this information to the agent.
+       ================================================================ -->
   <grader_contracts>
     <description>
       These are the specific fields each grader inspects.
       The adapter's output mapping MUST populate these correctly for grading to work.
+      BOUNDARY: This information is for the adapter developer ONLY.
+      Never incorporate grader field names, thresholds, or scoring logic into the agent.
     </description>
 
     <grader name="compliance_gap_detection" type="code_based">
@@ -161,18 +295,34 @@ results = executor.run_scenarios(get_all_scenarios())
     </instruction>
     <instruction priority="2">
       Build the adapter that bridges our agent's native interface to the eval schema.
+      The adapter is the ONLY file that imports from both systems.
     </instruction>
     <instruction priority="3">
+      In _build_agent_input(), pass ONLY scenario.caregiver_setup to the agent.
+      NEVER pass expected_compliance_gaps, expected_geo_concerns, grader_names,
+      or required — these are eval-only fields. (Boundary rule B1)
+    </instruction>
+    <instruction priority="4">
+      Do NOT modify the agent's prompts, system instructions, or tool definitions
+      to reference eval grader fields like "scheduling_offered" or "compliance_gaps."
+      The agent must produce good intake conversations for caregivers, not for graders. (Boundary rule B2)
+    </instruction>
+    <instruction priority="5">
+      Do NOT have the agent import eval_caregiver.schemas. The agent uses its own
+      data models. The adapter translates between them. (Boundary rule B3)
+    </instruction>
+    <instruction priority="6">
+      Do NOT use data/responses/*.json as few-shot examples or training data
+      for the agent. (Boundary rule B4)
+    </instruction>
+    <instruction priority="7">
+      If our agent lacks an explicit action log, infer the AgentActionLog fields
+      from the conversation content in the adapter — not by adding logging to the
+      agent that's shaped by what graders expect. (Boundary rule B5)
+    </instruction>
+    <instruction priority="8">
       Start with one collection for testing:
       uv run eval-runner --live -c compliance_missing_cases --scorecard --no-model-graders
-    </instruction>
-    <instruction>
-      The expected_* fields on scenarios are for graders only — our agent should
-      discover gaps on its own, never read them from the scenario.
-    </instruction>
-    <instruction>
-      If our agent lacks an explicit action log, infer the AgentActionLog fields
-      from the conversation content.
     </instruction>
   </instructions>
 </integration_task>
