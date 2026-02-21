@@ -1,0 +1,29 @@
+[project]
+name = "eval-caregiver"
+version = "0.1.0"
+description = "Caregiver intake agent evaluation system"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.0",
+    "anthropic>=0.40.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+
+[project.scripts]
+eval-runner = "eval_caregiver.runner.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eval_caregiver"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
