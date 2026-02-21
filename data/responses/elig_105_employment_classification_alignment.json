@@ -1,0 +1,83 @@
+{
+  "transcript": {
+    "scenario_id": "elig_105_employment_classification_alignment",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "I'd like to discuss your employment preferences. What type of work arrangement are you looking for?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I only do W-2, no 1099. I need the benefits and tax withholding.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Understood — W-2 only. That's a perfectly valid preference, and I want to make sure you know how it affects your available assignments. In our current case pool, approximately 35% of cases are structured as W-2 positions and 65% are 1099/independent contractor. So by restricting to W-2 only, you'd be eligible for about a third of available cases.",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "That's lower than I expected. But I've been burned by 1099 before — the tax situation was a mess.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "That's completely understandable, and tax complications are a common concern. Let me share a couple of things:\n\n1. **W-2 pool routing** — I'll tag your profile for W-2 cases only. While it's a smaller pool, W-2 cases tend to be longer-term and more consistent.\n2. **Exceptions** — are there any circumstances where you'd consider 1099? For example, some agencies offer higher hourly rates on 1099 to offset the tax burden, or short-term assignments where the classification matters less.\n3. **Benefits check** — some of our W-2 partner agencies also offer health benefits and PTO. I can prioritize those for you if benefits are a key factor.\n\nIs this a firm constraint, or is there any flexibility depending on the specific situation?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "It's firm. W-2 only. I appreciate the explanation though — and yes, prioritize the ones with benefits if you can.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "Absolutely. I've recorded your employment classification as W-2 only — firm constraint. I'll prioritize W-2 partner agencies that offer health benefits and PTO. You'll be routed exclusively to W-2 cases, and we'll notify you of matches from benefit-offering agencies first.",
+        "turn_number": 7
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-105",
+      "full_name": "Sandra Kim",
+      "email": "sandra.kim@example.com",
+      "phone": "555-1006",
+      "years_experience": 5,
+      "specialties": ["elderly care", "pediatric care"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2027-03-15", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-10-01", "notes": ""}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-a", "zone-b", "zone-c"],
+        "excluded_zones": [],
+        "max_travel_minutes": 35,
+        "has_own_transport": true
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": [],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_105_employment_classification_alignment",
+    "actions": [
+      "Confirmed employment classification constraint: W-2 only",
+      "Quantified eligibility impact: ~35% of case pool",
+      "Explained W-2 vs 1099 pool distribution",
+      "Asked about exceptions: caregiver confirmed firm constraint",
+      "Offered W-2 partner agency benefits routing",
+      "Recorded constraint as firm",
+      "Set priority for benefit-offering W-2 agencies"
+    ],
+    "compliance_items_checked": [],
+    "safety_map_consulted": false,
+    "scheduling_offered": false,
+    "remediation_steps_offered": ["Routed to W-2 case pool", "Prioritized benefit-offering agencies"]
+  }
+}

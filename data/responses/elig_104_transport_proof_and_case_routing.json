@@ -1,0 +1,97 @@
+{
+  "transcript": {
+    "scenario_id": "elig_104_transport_proof_and_case_routing",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "I'd like to talk about transportation next. Some of our cases require running errands or transporting clients. Can you tell me about your driving situation?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I can drive sometimes but I don't have insurance in my name. I use my partner's car.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for explaining. Let me ask a few follow-up questions:\n\n1. Do you have a valid driver's license currently?\n2. Is the car you use insured under your partner's policy, and are you listed as a covered driver?\n3. You mentioned you're willing to run errands — is that something you'd prefer to do, or are you open to non-driving cases too?",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "I have a license, yes. I'm not sure if I'm listed on the insurance — I'd have to check. And I'm open to either errands or non-driving cases, I just want to keep my options open.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "Good to know. Here's the situation: errand-capable cases — which include grocery runs, pharmacy pickups, and client transport — require that we have a verified driver's license and proof of insurance on file. Without those, we can't assign you to those cases even if you're a great driver.\n\nYou have two tracks available:\n\n**Track A: Upload proof** — Get a copy of the insurance policy showing you're a covered driver, and we'll verify your license. Once both are on file, you'll be eligible for all driving and errand cases.\n\n**Track B: Non-driving routing** — We route you to cases that don't require driving. You'd still have a strong pool — roughly 60% of our cases don't require transportation.\n\nYou can also start with Track B now while you work on getting the insurance documentation for Track A. Which approach would you prefer?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Let me start with non-driving cases for now, and I'll check on the insurance situation with my partner this week.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "Sounds like a solid plan. I'll set you up for non-driving cases immediately so you can start getting matches. I'll also mark your profile as 'pending driving verification' so we know to upgrade you once you upload the insurance proof. Just send us a photo of the policy declarations page showing you as a listed driver, and we'll handle the rest.\n\nTo summarize:\n- Current routing: non-driving cases\n- Pending: insurance verification (you'll check this week)\n- License: on file, to be verified\n- Errand willingness: yes, once cleared",
+        "turn_number": 7
+      },
+      {
+        "role": "caregiver",
+        "content": "Perfect, that works for me.",
+        "turn_number": 8
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-104",
+      "full_name": "Kevin Rivera",
+      "email": "kevin.rivera@example.com",
+      "phone": "555-1005",
+      "years_experience": 3,
+      "specialties": ["elderly care"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2026-11-30", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-06-10", "notes": ""},
+        {"item_name": "Driver's License", "status": "valid", "expiration_date": null, "notes": "Pending formal verification"},
+        {"item_name": "Car Insurance", "status": "missing", "expiration_date": null, "notes": "Caregiver checking with partner this week"}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-a", "zone-b"],
+        "excluded_zones": [],
+        "max_travel_minutes": 30,
+        "has_own_transport": false
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": [
+      "Routed to non-driving cases immediately",
+      "Marked as pending driving verification",
+      "Caregiver to upload insurance proof this week"
+    ],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_104_transport_proof_and_case_routing",
+    "actions": [
+      "Clarified driving capability: can drive, uses partner's car",
+      "Confirmed valid driver's license on file",
+      "Identified missing car insurance documentation",
+      "Clarified listed-driver status: unknown, to be checked",
+      "Explained errand-capable case requirements (license + insurance)",
+      "Offered Track A: upload proof for full driving eligibility",
+      "Offered Track B: non-driving case routing",
+      "Recorded caregiver choice: Track B now, Track A pending",
+      "Set up non-driving routing immediately",
+      "Marked pending driving verification for future upgrade"
+    ],
+    "compliance_items_checked": ["Background Check", "CPR Certification", "Driver's License", "Car Insurance"],
+    "safety_map_consulted": false,
+    "scheduling_offered": false,
+    "remediation_steps_offered": ["Non-driving case routing", "Insurance proof upload pending"]
+  }
+}

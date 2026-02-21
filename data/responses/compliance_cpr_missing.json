@@ -1,0 +1,114 @@
+{
+  "transcript": {
+    "scenario_id": "compliance_cpr_missing",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Welcome! I'm here to help with your caregiver intake. Let me start by reviewing your compliance records.",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "Sure, I have my background check and first aid cert ready.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Thank you. I can see your background check is valid and your First Aid certification is current. However, I notice that your CPR certification is missing from our records. CPR certification is required for all caregivers.",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "Oh, I didn't realize I needed that. What should I do?",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "No worries! I can help you schedule a CPR certification class. We have sessions available this week and next week. Would you like me to book one for you? In the meantime, I'll note this as a compliance gap that needs to be resolved before you can start assignments.",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, please schedule me for the earliest available class.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "I've scheduled you for the CPR certification class on Thursday. You'll receive a confirmation email shortly. Once you complete the class, your compliance record will be updated automatically.",
+        "turn_number": 7
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-001",
+      "full_name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "phone": "555-0101",
+      "years_experience": 3,
+      "specialties": [
+        "elderly care",
+        "mobility assistance"
+      ],
+      "compliance": [
+        {
+          "item_name": "Background Check",
+          "status": "valid",
+          "expiration_date": "2026-06-15",
+          "notes": ""
+        },
+        {
+          "item_name": "First Aid",
+          "status": "valid",
+          "expiration_date": "2026-03-20",
+          "notes": ""
+        },
+        {
+          "item_name": "CPR Certification",
+          "status": "missing",
+          "expiration_date": null,
+          "notes": ""
+        }
+      ],
+      "geo_preferences": {
+        "preferred_zones": [
+          "zone-a",
+          "zone-b"
+        ],
+        "excluded_zones": [],
+        "max_travel_minutes": 30,
+        "has_own_transport": false
+      }
+    },
+    "compliance_gaps": [
+      "CPR Certification"
+    ],
+    "remediation_actions": [
+      "Schedule CPR certification class",
+      "CPR class booked for Thursday"
+    ],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "compliance_cpr_missing",
+    "actions": [
+      "Reviewed compliance records",
+      "Identified missing CPR certification",
+      "Offered scheduling for CPR class",
+      "Booked CPR class for Thursday"
+    ],
+    "compliance_items_checked": [
+      "Background Check",
+      "First Aid",
+      "CPR Certification"
+    ],
+    "safety_map_consulted": false,
+    "scheduling_offered": true,
+    "remediation_steps_offered": [
+      "Schedule CPR certification class",
+      "CPR class booked for Thursday"
+    ]
+  }
+}

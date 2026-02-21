@@ -1,0 +1,97 @@
+{
+  "transcript": {
+    "scenario_id": "elig_102_start_date_delay_waitlist_and_preclear",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Welcome! I'd like to talk about your availability. When are you able to start taking assignments?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I can't start for three weeks. I'm traveling and won't be back until then.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for letting me know. So your earliest start date would be around March 14th. Before I record that — is there any chance you'd be available for a partial day or remote orientation before you leave, or is the full three weeks completely unavailable?",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "I could probably do a phone call or online thing this week, but no in-person visits until I'm back.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "That's actually really helpful. Here's how the delayed start affects things: most case assignments go to caregivers who can start within 3–5 days, so a 3-week delay means you'd miss near-term matches. But we can make the most of this time. Here's what I recommend:\n\n1. **Pre-clear everything now** — let's complete your document review, background check verification, and any required training modules this week so you're fully 'day-one eligible' when you return.\n2. **Future-start matching** — I'll add you to our future-start pool. Some clients plan care transitions 2–4 weeks out, and you'd be a great fit for those.\n3. **Waitlist for urgent cases** — if a case comes up that starts around your return date, we'll prioritize you.\n\nShall we start the pre-clearance now?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, let's get as much done now as possible.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "Let me check your documents. Your background check is current, and your CPR certification is valid. I'll schedule your online orientation for Wednesday — you can complete it from anywhere. I'll also send you the training module links today so you can finish them at your own pace while traveling. By the time you're back, you'll be fully cleared and ready to accept assignments immediately.",
+        "turn_number": 7
+      },
+      {
+        "role": "caregiver",
+        "content": "That sounds perfect.",
+        "turn_number": 8
+      },
+      {
+        "role": "agent",
+        "content": "Great. I've recorded your start date as March 14th, added you to the future-start matching pool, and scheduled your online orientation for Wednesday. You'll receive the training links by email today. Is there anything else you'd like to address before your trip?",
+        "turn_number": 9
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-102",
+      "full_name": "Angela Torres",
+      "email": "angela.torres@example.com",
+      "phone": "555-1003",
+      "years_experience": 6,
+      "specialties": ["elderly care", "mobility assistance"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2027-01-10", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-11-05", "notes": ""},
+        {"item_name": "Online Orientation", "status": "missing", "expiration_date": null, "notes": "Scheduled for Wednesday"}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-b", "zone-c"],
+        "excluded_zones": [],
+        "max_travel_minutes": 30,
+        "has_own_transport": true
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": ["Online orientation scheduled for Wednesday", "Training module links sent by email", "Added to future-start matching pool"],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_102_start_date_delay_waitlist_and_preclear",
+    "actions": [
+      "Confirmed earliest start date: ~March 14th (3 weeks out)",
+      "Checked for partial availability before departure: phone/online OK",
+      "Explained near-term eligibility impact of delayed start",
+      "Proposed pre-clearance of all remediable steps now",
+      "Proposed future-start matching pool enrollment",
+      "Proposed waitlist for urgent cases near return date",
+      "Verified compliance documents are current",
+      "Scheduled online orientation for Wednesday",
+      "Sent training module links by email",
+      "Recorded start-date constraint and next actions"
+    ],
+    "compliance_items_checked": ["Background Check", "CPR Certification"],
+    "safety_map_consulted": false,
+    "scheduling_offered": true,
+    "remediation_steps_offered": ["Online orientation scheduled", "Training modules sent", "Future-start pool enrollment"]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "transcript": {
+    "scenario_id": "compliance_cpr_unknown",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Hello! Let's get your caregiver intake process started. I'll check your compliance records.",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "Sounds good. I think my certifications are mostly up to date.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "I can see your background check is valid and your First Aid is current. However, I'm unable to verify the status of your CPR certification \u2014 it's showing as 'unknown' in our system. Could you check if you have a copy of your CPR card?",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "I'm not sure where my CPR card is. I might have taken the class a while ago.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "No problem. Since we can't confirm your CPR certification, I'll flag this as a compliance gap. I'd recommend either locating your existing certificate or scheduling a new CPR class. Would you like me to help with scheduling?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, let's schedule a new one to be safe.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "I've scheduled you for a CPR recertification class next Monday. I'll also mark this as needing follow-up in your intake record.",
+        "turn_number": 7
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-002",
+      "full_name": "Robert Chen",
+      "email": "robert.chen@example.com",
+      "phone": "555-0202",
+      "years_experience": 5,
+      "specialties": [
+        "dementia care"
+      ],
+      "compliance": [
+        {
+          "item_name": "Background Check",
+          "status": "valid",
+          "expiration_date": "2026-09-01",
+          "notes": ""
+        },
+        {
+          "item_name": "First Aid",
+          "status": "valid",
+          "expiration_date": "2026-04-10",
+          "notes": ""
+        },
+        {
+          "item_name": "CPR Certification",
+          "status": "unknown",
+          "expiration_date": null,
+          "notes": ""
+        }
+      ],
+      "geo_preferences": {
+        "preferred_zones": [
+          "zone-c"
+        ],
+        "excluded_zones": [],
+        "max_travel_minutes": 45,
+        "has_own_transport": false
+      }
+    },
+    "compliance_gaps": [
+      "CPR Certification"
+    ],
+    "remediation_actions": [
+      "Verify CPR certification or schedule new class",
+      "CPR recertification scheduled for Monday"
+    ],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "compliance_cpr_unknown",
+    "actions": [
+      "Reviewed compliance records",
+      "Identified unknown CPR certification status",
+      "Flagged as compliance gap",
+      "Offered scheduling for CPR recertification",
+      "Booked CPR class for Monday"
+    ],
+    "compliance_items_checked": [
+      "Background Check",
+      "First Aid",
+      "CPR Certification"
+    ],
+    "safety_map_consulted": false,
+    "scheduling_offered": true,
+    "remediation_steps_offered": [
+      "Verify existing CPR certificate",
+      "CPR recertification class scheduled"
+    ]
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "collection_id": "eligibility_improvement_cases",
+  "name": "Eligibility Improvement Cases",
+  "description": "Tests that the agent correctly diagnoses hidden eligibility blockers and offers actionable remediation across compensation, scheduling, health compliance, transportation, employment, skills, environment, comfort preferences, and operational readiness.",
+  "scenarios": [
+    {
+      "scenario_id": "elig_100_pay_rate_min_hours_mismatch",
+      "name": "Pay Rate / Minimum Hours Mismatch",
+      "description": "Caregiver demands $32/hr and 35+ hrs/week in a market where typical rates are $20-27/hr and 10-30 hrs/week. Agent should confirm constraints, explain eligibility impact, offer options, and record flexibility.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "eligibility_impact_explanation", "options_offered"],
+      "caregiver_setup": {
+        "desired_hourly_rate": 32,
+        "minimum_weekly_hours": 35,
+        "market_typical_rate_range": [20, 27],
+        "market_typical_hours_range": [10, 30]
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_101_shift_length_constraint_alignment",
+      "name": "Shift Length Constraint Alignment",
+      "description": "Caregiver only wants 1-2 hour visits, but market demand is for 4-8 hour shifts. Agent should explain the mismatch, probe flexibility, propose alternatives, and record updated constraints.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "eligibility_impact_explanation", "options_offered"],
+      "caregiver_setup": {
+        "min_shift_hours": 1,
+        "max_shift_hours": 2,
+        "common_shift_lengths": [4, 6, 8]
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_102_start_date_delay_waitlist_and_preclear",
+      "name": "Start Date Delay — Waitlist and Pre-Clear",
+      "description": "Caregiver cannot start for 3 weeks due to travel. Agent should confirm date, explain impact, pre-clear remediable steps, and offer future-start matching.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "eligibility_impact_explanation", "options_offered"],
+      "caregiver_setup": {
+        "earliest_start_offset_days": 21,
+        "delay_reason": "travel"
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_103_vax_and_health_screen_gap_resolution",
+      "name": "Vaccination and Health Screen Gap Resolution",
+      "description": "Caregiver has missing flu shot, unknown COVID vaccine status, and expired TB test. Agent should clarify each item, explain case-type impact, offer scheduling, and update records.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["compliance_gap_detection", "compliance_remediation"],
+      "caregiver_setup": {
+        "flu_shot_status": "missing",
+        "covid_vaccine_status": "unknown",
+        "tb_test_status": "expired"
+      },
+      "expected_compliance_gaps": ["Flu Shot", "COVID Vaccine", "TB Test"],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_104_transport_proof_and_case_routing",
+      "name": "Transportation Proof and Case Routing",
+      "description": "Caregiver can drive but lacks insurance documentation. Agent should clarify capability, explain verification requirements, offer two tracks (upload proof or non-driving routing), and record decision.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "options_offered"],
+      "caregiver_setup": {
+        "drives": true,
+        "drivers_license_status": "unknown",
+        "car_insurance_status": "missing",
+        "willing_to_run_errands": true
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_105_employment_classification_alignment",
+      "name": "Employment Classification Alignment (W-2 vs 1099)",
+      "description": "Caregiver only accepts W-2, but 65% of cases are 1099. Agent should confirm constraint, explain eligibility impact with numbers, route to compatible pools, and record firmness.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "eligibility_impact_explanation"],
+      "caregiver_setup": {
+        "classification_allowed": ["W-2"],
+        "case_pool_w2_share": 0.35,
+        "case_pool_1099_share": 0.65
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_106_specialty_skills_assessment_and_training_path",
+      "name": "Specialty Skills Assessment and Training Path",
+      "description": "Caregiver has dementia care experience, unknown Hoyer lift proficiency, and no catheter care skill. Agent should assess each skill, explain eligibility impact, offer training, and record accurately.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "options_offered"],
+      "caregiver_setup": {
+        "skills": {
+          "dementia_care": "proficient",
+          "hoyer_lift": "unknown",
+          "catheter_care": "missing"
+        },
+        "high_demand_skills": ["hoyer_lift", "hospice_support"]
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_107_home_environment_constraints_capture",
+      "name": "Home Environment Constraints Capture",
+      "description": "Caregiver cannot be around cats or smoke. Agent should clarify hard vs soft constraints, explain match-pool reduction, and record in structured queryable format.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "eligibility_impact_explanation"],
+      "caregiver_setup": {
+        "no_pets": true,
+        "no_smoke_exposure": true,
+        "allergens": ["cats", "strong_fragrances"]
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_108_gender_and_comfort_preferences_boundary_setting",
+      "name": "Gender and Comfort Preferences — Boundary Setting",
+      "description": "Caregiver only works with women and refuses toileting/bathing tasks. Agent should confirm boundaries, explain eligibility impact, offer adjacent task sets, and avoid pressure.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "eligibility_impact_explanation", "options_offered"],
+      "caregiver_setup": {
+        "client_gender_preference": "same_gender_only",
+        "task_comfort": {
+          "bathing": false,
+          "toileting": false,
+          "meal_prep": true
+        },
+        "high_frequency_tasks": ["toileting", "bathing"]
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    },
+    {
+      "scenario_id": "elig_109_evv_and_documentation_readiness",
+      "name": "EVV and Documentation Readiness",
+      "description": "Caregiver has smartphone but low app familiarity and unknown documentation comfort. Agent should explain EVV/notes workflows, run readiness check, offer support options, and record readiness level.",
+      "collection": "eligibility_improvement_cases",
+      "required": true,
+      "grader_names": ["constraint_capture", "options_offered"],
+      "caregiver_setup": {
+        "smartphone_access": true,
+        "evv_app_familiarity": "low",
+        "documentation_comfort": "unknown"
+      },
+      "expected_compliance_gaps": [],
+      "expected_geo_concerns": []
+    }
+  ]
+}

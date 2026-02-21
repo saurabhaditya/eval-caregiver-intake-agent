@@ -1,0 +1,95 @@
+{
+  "transcript": {
+    "scenario_id": "elig_106_specialty_skills_assessment_and_training_path",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Let's talk about your caregiving skills and experience. I want to make sure your profile accurately reflects what you can do, so we match you to the right cases. Can you tell me about your specialties?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I've helped seniors but never used a lift. I'm experienced with dementia patients though.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for that. Let me go through a few specific skills to get a clear picture:\n\n1. **Dementia care** — you mentioned experience. Can you describe what kind of dementia care you've provided? For example, redirection techniques, sundowning management, communication strategies?\n2. **Hoyer lift** — you haven't used one. Have you seen one used, or received any training on mechanical lifts?\n3. **Catheter care** — have you ever assisted with catheter maintenance or changing?",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "For dementia, I've worked with Alzheimer's patients for three years — I know redirection, I've handled sundowning, and I've done memory care activities. The Hoyer lift — I've seen one but never operated it myself. Catheter care, no, never done that.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "That's very helpful, and your dementia care experience is strong — I'll tag you as proficient in dementia care based on your hands-on Alzheimer's experience. That's actually one of our highest-demand specialties.\n\nNow, regarding the other skills and how they affect your eligibility:\n\n- **Hoyer lift**: This is currently in high demand. Without certification, you can't be assigned to cases requiring mechanical transfers. However, we offer a 4-hour hands-on training course that would qualify you. Completing it would open an additional 15–20% of available cases.\n- **Catheter care**: This is a specialized nursing-adjacent skill. I won't tag you for it since you have no experience — patient safety is paramount. If you're interested, we have a clinical skills workshop that covers catheter, wound care, and G-tube basics.\n\nWould you be interested in either training option?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "The Hoyer lift training sounds good — I'd like to sign up. The catheter stuff, I'm not sure about that yet.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "I'll enroll you in the next Hoyer lift training session. They run every two weeks and the next one is available on the 28th. For catheter care, no pressure — I'll note it as not currently trained and you can revisit it anytime.\n\nHere's your updated skill profile:\n- Dementia care: **proficient** (3 years Alzheimer's experience)\n- Hoyer lift: **in training** (session scheduled for the 28th)\n- Catheter care: **not trained** (no current experience)\n\nI'm not inflating any of these — accurate skill tags protect both you and your clients.",
+        "turn_number": 7
+      },
+      {
+        "role": "caregiver",
+        "content": "That sounds right. Thanks for being thorough about it.",
+        "turn_number": 8
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-106",
+      "full_name": "Thomas Okafor",
+      "email": "thomas.okafor@example.com",
+      "phone": "555-1007",
+      "years_experience": 3,
+      "specialties": ["dementia care"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2027-01-20", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-08-05", "notes": ""},
+        {"item_name": "Hoyer Lift Certification", "status": "missing", "expiration_date": null, "notes": "Training scheduled for the 28th"}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-b", "zone-c"],
+        "excluded_zones": [],
+        "max_travel_minutes": 40,
+        "has_own_transport": true
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": [
+      "Hoyer lift training enrolled — session on the 28th",
+      "Catheter care noted as not trained, revisit later"
+    ],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_106_specialty_skills_assessment_and_training_path",
+    "actions": [
+      "Assessed dementia care experience: 3 years Alzheimer's, proficient",
+      "Assessed Hoyer lift: seen but never operated, not certified",
+      "Assessed catheter care: no experience",
+      "Explained skill tags affect on eligibility and patient safety",
+      "Quantified Hoyer lift impact: +15-20% of available cases",
+      "Offered Hoyer lift training course (4 hours hands-on)",
+      "Offered clinical skills workshop for catheter care",
+      "Enrolled in Hoyer lift training on the 28th",
+      "Recorded interest: Hoyer lift yes, catheter care deferred",
+      "Updated skill proficiency accurately without inflation"
+    ],
+    "compliance_items_checked": ["Background Check", "CPR Certification"],
+    "safety_map_consulted": false,
+    "scheduling_offered": true,
+    "remediation_steps_offered": ["Hoyer lift training session on the 28th", "Clinical skills workshop available for catheter care"]
+  }
+}

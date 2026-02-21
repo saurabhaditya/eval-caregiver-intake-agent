@@ -1,0 +1,94 @@
+{
+  "transcript": {
+    "scenario_id": "elig_100_pay_rate_min_hours_mismatch",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Thanks for joining the intake call! Let's make sure we set you up for the best possible match. I'd like to go over your compensation and scheduling preferences. What hourly rate are you looking for?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I won't take anything under $32/hr and I need full-time hours — at least 35 hours a week.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Got it — $32/hour minimum and at least 35 hours per week. I want to be upfront with you: in our current market, the typical hourly range for caregiver assignments is $20–$27/hr, and most cases offer between 10 and 30 hours per week. At $32/hr and 35+ hours, you'd be eligible for roughly 5–10% of available cases, which could mean longer wait times between assignments.",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "I didn't realize it was that limited. I have bills to pay though.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "I completely understand. Let me walk you through a few options to maximize your eligibility while respecting your needs:\n\n1. **Adjust your rate slightly** — at $27/hr you'd match roughly 40% of available cases.\n2. **Lower your minimum hours** — accepting 25+ hours/week instead of 35 opens many more cases; you could combine multiple clients.\n3. **Target premium or specialty cases** — cases involving specialized care (e.g., dementia, hospice) often pay $28–$35/hr, so your rate fits if you qualify.\n4. **Keep current constraints as firm** — we'll mark $32/hr and 35 hrs/week and notify you when matching cases appear.\n\nWould any of these work for you?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Option 3 sounds interesting. I do have dementia care experience. But if that doesn't work out, I could probably go down to $28/hr.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "Great. I'll record your primary preference as $32/hr with a flexible floor of $28/hr, and 35 hours/week minimum. I'll also flag your dementia care specialty so you're prioritized for premium cases. If no premium cases are available, you're open to $28/hr — is that right?",
+        "turn_number": 7
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, that sounds right.",
+        "turn_number": 8
+      },
+      {
+        "role": "agent",
+        "content": "Perfect. I've updated your profile. You'll be matched to specialty cases first at your preferred rate, with a fallback to $28/hr for general cases. I'll also note the 35-hour minimum as firm. We'll send you matches as they come in.",
+        "turn_number": 9
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-100",
+      "full_name": "Marcus Johnson",
+      "email": "marcus.johnson@example.com",
+      "phone": "555-1001",
+      "years_experience": 4,
+      "specialties": ["dementia care"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2027-02-01", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-09-15", "notes": ""}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-a", "zone-b"],
+        "excluded_zones": [],
+        "max_travel_minutes": 40,
+        "has_own_transport": true
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": [],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_100_pay_rate_min_hours_mismatch",
+    "actions": [
+      "Confirmed pay-rate constraint: $32/hr minimum",
+      "Confirmed minimum-hours constraint: 35 hrs/week",
+      "Explained market norms: $20-27/hr, 10-30 hrs/week",
+      "Quantified eligibility impact: ~5-10% of cases at current constraints",
+      "Offered 4 options: adjust rate, lower hours, target specialty, keep firm",
+      "Recorded flexible floor of $28/hr",
+      "Flagged dementia care specialty for premium matching",
+      "Recorded flexibility: yes, with $28/hr floor"
+    ],
+    "compliance_items_checked": [],
+    "safety_map_consulted": false,
+    "scheduling_offered": false,
+    "remediation_steps_offered": ["Target premium/specialty cases", "Flexible rate floor at $28/hr"]
+  }
+}

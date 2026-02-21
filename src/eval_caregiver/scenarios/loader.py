@@ -1,15 +1,27 @@
-"""Scenario loader: registry of all scenario collections."""
+"""Scenario loader: registry of all scenario collections loaded from JSON."""
 
 from __future__ import annotations
 
-from eval_caregiver.scenarios.compliance_missing import compliance_missing_cases
-from eval_caregiver.scenarios.geo_over_restriction import geo_over_restriction_cases
+import json
+from pathlib import Path
+
 from eval_caregiver.schemas.scenarios import ScenarioCollection, TestScenario
 
-_COLLECTIONS: dict[str, ScenarioCollection] = {
-    compliance_missing_cases.collection_id: compliance_missing_cases,
-    geo_over_restriction_cases.collection_id: geo_over_restriction_cases,
-}
+_DATA_DIR = Path(__file__).resolve().parents[3] / "data"
+
+
+def _load_collections() -> dict[str, ScenarioCollection]:
+    """Scan data/scenarios/*.json and validate each as a ScenarioCollection."""
+    collections: dict[str, ScenarioCollection] = {}
+    scenarios_dir = _DATA_DIR / "scenarios"
+    for path in sorted(scenarios_dir.glob("*.json")):
+        raw = json.loads(path.read_text())
+        collection = ScenarioCollection.model_validate(raw)
+        collections[collection.collection_id] = collection
+    return collections
+
+
+_COLLECTIONS: dict[str, ScenarioCollection] = _load_collections()
 
 
 def get_all_collections() -> list[ScenarioCollection]:

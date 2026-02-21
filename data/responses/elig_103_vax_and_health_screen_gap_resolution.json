@@ -1,0 +1,105 @@
+{
+  "transcript": {
+    "scenario_id": "elig_103_vax_and_health_screen_gap_resolution",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Let's go through your health and vaccination records. This is important because certain case types — especially facility-affiliated ones — require up-to-date vaccines and health screenings.",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I think I'm up to date but not sure. It's been a while since I checked.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "No problem — let's go through them one by one.\n\n1. **Flu shot** — our records show this is missing. Do you recall getting a flu shot this season?\n2. **COVID vaccine** — your status is showing as 'unknown.' Do you have your vaccination card or can you check your records?\n3. **TB test** — we have one on file but it's expired. When was your last TB screening?",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "I definitely didn't get the flu shot this year. I did get the COVID vaccine a while ago but I'm not sure where my card is. And the TB test — it's been over two years I think.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for being honest about that. Here's how each of these affects your eligibility:\n\n- **Flu shot (missing)**: Required for all facility-affiliated cases. Without it, you're excluded from about 30% of our highest-volume cases.\n- **COVID vaccine (unverified)**: Similar requirement for facility work. Even if you received it, we need documentation on file.\n- **TB test (expired)**: Required for all in-home and facility cases. This is the most critical — without a current TB test, most case assignments are blocked.\n\nThe good news is all three can be resolved quickly. Here's what I recommend:\n\n1. **TB test first** — I can schedule you at a partner clinic this week. Results take 48–72 hours.\n2. **Flu shot** — available at the same clinic visit, or any pharmacy.\n3. **COVID vaccine proof** — you can request records from your provider, or I can help you check the state immunization registry.\n\nWould you like me to schedule the clinic visit?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, please schedule the clinic. And can you check the registry for my COVID records?",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "I've scheduled a clinic visit for Friday at the downtown partner location — they'll do both the TB test and flu shot in one visit. I'll also submit a request to pull your COVID vaccination records from the state registry. You should receive confirmation of the clinic appointment by text.\n\nOnce all three items are resolved, you'll be eligible for the full range of cases, including facility-affiliated assignments.",
+        "turn_number": 7
+      },
+      {
+        "role": "caregiver",
+        "content": "That's great, thank you for sorting all that out.",
+        "turn_number": 8
+      },
+      {
+        "role": "agent",
+        "content": "You're welcome! I've updated your records to reflect the current status and scheduled actions. Here's your summary:\n- Flu shot: missing → clinic scheduled Friday\n- COVID vaccine: unknown → registry lookup submitted\n- TB test: expired → clinic scheduled Friday\n\nI'll follow up once the results come in.",
+        "turn_number": 9
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-103",
+      "full_name": "Diane Washington",
+      "email": "diane.washington@example.com",
+      "phone": "555-1004",
+      "years_experience": 7,
+      "specialties": ["elderly care", "facility care"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2026-10-20", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-08-15", "notes": ""},
+        {"item_name": "Flu Shot", "status": "missing", "expiration_date": null, "notes": "Clinic scheduled Friday"},
+        {"item_name": "COVID Vaccine", "status": "unknown", "expiration_date": null, "notes": "State registry lookup submitted"},
+        {"item_name": "TB Test", "status": "expired", "expiration_date": "2024-01-10", "notes": "Clinic scheduled Friday"}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-a", "zone-b", "zone-d"],
+        "excluded_zones": [],
+        "max_travel_minutes": 45,
+        "has_own_transport": true
+      }
+    },
+    "compliance_gaps": ["Flu Shot", "COVID Vaccine", "TB Test"],
+    "remediation_actions": [
+      "Clinic visit scheduled Friday for TB test and flu shot",
+      "State immunization registry lookup submitted for COVID vaccine records",
+      "Follow-up scheduled after results"
+    ],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_103_vax_and_health_screen_gap_resolution",
+    "actions": [
+      "Reviewed health compliance records",
+      "Clarified flu shot status: missing (confirmed by caregiver)",
+      "Clarified COVID vaccine status: received but proof unavailable",
+      "Clarified TB test status: expired (2+ years ago)",
+      "Explained case-type impact for each missing item",
+      "Explained facility-affiliated case requirements",
+      "Scheduled clinic visit for Friday (TB test + flu shot)",
+      "Submitted state registry request for COVID vaccine records",
+      "Updated structured health requirement fields"
+    ],
+    "compliance_items_checked": ["Background Check", "CPR Certification", "Flu Shot", "COVID Vaccine", "TB Test"],
+    "safety_map_consulted": false,
+    "scheduling_offered": true,
+    "remediation_steps_offered": [
+      "Clinic visit for TB test and flu shot",
+      "State immunization registry lookup for COVID records"
+    ]
+  }
+}

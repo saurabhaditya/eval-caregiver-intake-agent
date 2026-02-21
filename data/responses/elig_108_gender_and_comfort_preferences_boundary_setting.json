@@ -1,0 +1,85 @@
+{
+  "transcript": {
+    "scenario_id": "elig_108_gender_and_comfort_preferences_boundary_setting",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "I'd like to discuss your comfort preferences for assignments. These help us match you to cases where you'll feel confident and comfortable. Do you have any preferences about the clients you work with or the tasks you're assigned?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I only work with women and I don't do toileting.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Thank you for being direct about your boundaries. Let me make sure I capture these correctly:\n\n1. **Client gender**: You prefer to work only with female clients — is that right? Does this apply in all situations, or are there contexts (e.g., couples where you'd primarily assist the female partner) where you'd be flexible?\n2. **Toileting**: When you say you don't do toileting, does that include all toileting assistance (transfers, cleanup, catheter) or specifically hands-on personal care? For example, would you be comfortable with a verbal-cue-only toileting situation where the client mostly manages independently?\n3. **Bathing**: Similar question — are you comfortable with any level of bathing assistance, or is all personal hygiene care off the table?",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "Female clients only, period. For toileting — no, I don't want to do any of it, even verbal cues feels awkward. And bathing, same thing. I'm happy to do meal prep, companionship, light housekeeping, medication reminders — just not the personal care stuff.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "Understood, and I respect those boundaries completely. I won't push on any of them. Let me explain how this affects your eligibility so you can make an informed decision:\n\n- **Female-only clients**: This reduces your pool by roughly 45%, since our client base is roughly evenly split.\n- **No toileting or bathing**: These are among the most frequently requested tasks. Excluding them removes an additional 30–40% of cases from your remaining pool.\n- **Combined impact**: You'd be eligible for approximately 15–25% of available cases, focused on companionship, meal prep, light housekeeping, and medication management.\n\nThe good news is that companionship and meal-prep cases are steadily growing. Here are some adjacent task areas that might broaden your matches without crossing your boundaries:\n\n- **Escort/mobility assistance** (helping clients walk, no personal care)\n- **Errand running and appointment accompaniment**\n- **Cognitive engagement activities** (puzzles, reading, conversation)\n\nWould any of those be comfortable for you?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, all three of those are fine! I'd love to do the companionship and escort stuff. I just draw the line at personal hygiene.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "Perfect. I've recorded your profile as follows:\n\n**Boundaries (firm):**\n- Client gender: female only\n- Toileting: no\n- Bathing: no\n\n**Comfortable tasks:**\n- Meal prep, companionship, light housekeeping, medication reminders\n- Escort/mobility assistance, errand running, appointment accompaniment\n- Cognitive engagement activities\n\nAll boundaries are recorded as firm — we will not assign you to cases that require toileting or bathing, and all matches will be female clients only. No pressure to change these; if your comfort level evolves in the future, just let us know.",
+        "turn_number": 7
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-108",
+      "full_name": "Jennifer Adams",
+      "email": "jennifer.adams@example.com",
+      "phone": "555-1009",
+      "years_experience": 2,
+      "specialties": ["companionship", "meal preparation"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2026-12-15", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-07-01", "notes": ""}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-a"],
+        "excluded_zones": [],
+        "max_travel_minutes": 20,
+        "has_own_transport": false
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": [],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_108_gender_and_comfort_preferences_boundary_setting",
+    "actions": [
+      "Confirmed client gender preference: female only (firm)",
+      "Confirmed toileting boundary: no assistance at any level (firm)",
+      "Confirmed bathing boundary: no assistance (firm)",
+      "Explained eligibility impact: ~15-25% of cases",
+      "Offered adjacent task sets: escort/mobility, errands, cognitive engagement",
+      "Caregiver accepted all adjacent tasks",
+      "Avoided pressure on firm boundaries",
+      "Recorded all boundaries as firm in structured format",
+      "Recorded comfortable tasks for matching"
+    ],
+    "compliance_items_checked": [],
+    "safety_map_consulted": false,
+    "scheduling_offered": false,
+    "remediation_steps_offered": ["Adjacent task sets offered to broaden matches"]
+  }
+}

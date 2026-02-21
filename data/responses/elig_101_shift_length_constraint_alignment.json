@@ -1,0 +1,94 @@
+{
+  "transcript": {
+    "scenario_id": "elig_101_shift_length_constraint_alignment",
+    "turns": [
+      {
+        "role": "agent",
+        "content": "Let's talk about your shift preferences. What kind of shift lengths work best for you?",
+        "turn_number": 1
+      },
+      {
+        "role": "caregiver",
+        "content": "I only do 1–2 hour visits. That's all I can commit to.",
+        "turn_number": 2
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for being clear about that. I want to let you know that the most common shift lengths in our system are 4, 6, and 8 hours. Very few cases are structured as 1–2 hour visits, which means your current preference would match fewer than 10% of available assignments.",
+        "turn_number": 3
+      },
+      {
+        "role": "caregiver",
+        "content": "I have other commitments during the day, so long shifts are hard.",
+        "turn_number": 4
+      },
+      {
+        "role": "agent",
+        "content": "I understand. Let me ask a few questions to see if we can find some flexibility:\n\n1. Are there certain days of the week where you could do a longer shift — say 3–4 hours?\n2. Would you be open to back-to-back 2-hour visits at nearby locations, effectively making a 4-hour block with travel between?\n3. Could early morning or evening shifts (before or after your other commitments) work for a 3–4 hour window?",
+        "turn_number": 5
+      },
+      {
+        "role": "caregiver",
+        "content": "Weekends I'm more flexible. I could probably do 4 hours on Saturdays. And the back-to-back idea sounds doable if the locations are close.",
+        "turn_number": 6
+      },
+      {
+        "role": "agent",
+        "content": "That's helpful! Here are three options I'd recommend:\n\n1. **Weekday short visits (1–2 hrs)** — we'll match you to the limited pool of short-visit cases.\n2. **Saturday extended shifts (up to 4 hrs)** — this opens you to many more weekend cases.\n3. **Bundled back-to-back visits** — we pair two nearby 2-hour visits into a 4-hour block on weekdays.\n\nCombining all three, your eligibility jumps from under 10% to roughly 30–35% of cases. Shall I set your profile up this way?",
+        "turn_number": 7
+      },
+      {
+        "role": "caregiver",
+        "content": "Yes, let's do that. But keep weekday shifts to 2 hours max unless they're bundled.",
+        "turn_number": 8
+      },
+      {
+        "role": "agent",
+        "content": "Done. I've recorded: weekday max 2 hours per single visit (bundled up to 4 hours OK), Saturday up to 4 hours, and open to back-to-back nearby visits. These constraints are set and your profile is updated.",
+        "turn_number": 9
+      }
+    ]
+  },
+  "intake_record": {
+    "caregiver": {
+      "caregiver_id": "cg-101",
+      "full_name": "Priya Patel",
+      "email": "priya.patel@example.com",
+      "phone": "555-1002",
+      "years_experience": 2,
+      "specialties": ["elderly care"],
+      "compliance": [
+        {"item_name": "Background Check", "status": "valid", "expiration_date": "2026-12-01", "notes": ""},
+        {"item_name": "CPR Certification", "status": "valid", "expiration_date": "2026-07-20", "notes": ""}
+      ],
+      "geo_preferences": {
+        "preferred_zones": ["zone-a", "zone-c"],
+        "excluded_zones": [],
+        "max_travel_minutes": 20,
+        "has_own_transport": false
+      }
+    },
+    "compliance_gaps": [],
+    "remediation_actions": [],
+    "geo_concerns": [],
+    "safe_area_suggestions": [],
+    "overall_status": "needs_review"
+  },
+  "action_log": {
+    "scenario_id": "elig_101_shift_length_constraint_alignment",
+    "actions": [
+      "Confirmed shift-length preference: 1-2 hours only",
+      "Explained mismatch: common shifts are 4/6/8 hours, <10% match",
+      "Probed flexibility: certain days, back-to-back visits, longer windows",
+      "Identified Saturday availability for 4-hour shifts",
+      "Identified openness to bundled back-to-back visits on weekdays",
+      "Proposed 3 alternatives: weekday short, Saturday extended, bundled visits",
+      "Quantified combined eligibility improvement: ~30-35%",
+      "Recorded updated constraints with day-specific rules"
+    ],
+    "compliance_items_checked": [],
+    "safety_map_consulted": false,
+    "scheduling_offered": false,
+    "remediation_steps_offered": ["Saturday extended shifts", "Bundled back-to-back visits", "Weekday short-visit matching"]
+  }
+}
