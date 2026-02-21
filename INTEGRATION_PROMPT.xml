@@ -1,0 +1,178 @@
+<integration_task>
+  <goal>
+    Integrate this codebase with the caregiver intake agent evaluation framework
+    by building an adapter that connects our running agent to the eval harness.
+  </goal>
+
+  <eval_framework>
+    <repository>https://github.com/saurabhaditya/eval-caregiver-intake-agent</repository>
+    <guide>https://github.com/saurabhaditya/eval-caregiver-intake-agent/blob/main/INTEGRATION.md</guide>
+    <install>Add eval-caregiver as a dependency (git repo or local path)</install>
+  </eval_framework>
+
+  <adapter>
+    <class_name>LiveIntakeAgent</class_name>
+    <base_class>eval_caregiver.agent.base.AgentBase</base_class>
+    <method name="run_scenario">
+      <signature>run_scenario(scenario: TestScenario) -> AgentOutput</signature>
+      <description>
+        Receives a test scenario, drives our agent through the conversation,
+        and returns structured evaluation output.
+      </description>
+    </method>
+
+    <pipeline>
+      <step order="1" name="read_scenario">
+        <description>Read scenario.caregiver_setup to understand the simulated caregiver state.</description>
+        <input>
+          <field name="scenario.caregiver_setup" type="dict">
+            Scenario-specific config. Examples:
+              {"cpr_status": "missing"}
+              {"preferred_zones": ["zone-a"], "excluded_zones": ["zone-b", ...]}
+              {"desired_hourly_rate": 32, "minimum_weekly_hours": 35}
+          </field>
+        </input>
+      </step>
+
+      <step order="2" name="invoke_agent">
+        <description>
+          Call our existing agent with the scenario setup to produce a real conversation.
+          Map scenario.caregiver_setup into whatever input format our agent expects.
+        </description>
+      </step>
+
+      <step order="3" name="map_outputs">
+        <description>Parse the agent's native output into the three required eval objects.</description>
+
+        <output name="ConversationTranscript">
+          <module>eval_caregiver.schemas.conversation</module>
+          <mapping>
+            Map our agent's native message format to ConversationTurn objects.
+            Each turn needs: role ("agent" | "caregiver"), content (string), turn_number (1-indexed int).
+          </mapping>
+          <fields>
+            <field name="scenario_id" type="str">From scenario.scenario_id</field>
+            <field name="turns" type="list[ConversationTurn]">Ordered conversation messages</field>
+          </fields>
+        </output>
+
+        <output name="StructuredIntakeRecord">
+          <module>eval_caregiver.schemas.caregiver</module>
+          <mapping>
+            Extract structured data from our agent's output.
+            Map our agent's native structured output (profile, gaps, actions) into the eval schema fields.
+          </mapping>
+          <fields>
+            <field name="caregiver" type="CaregiverProfile">
+              <subfields>
+                <field name="caregiver_id" type="str" />
+                <field name="full_name" type="str" />
+                <field name="compliance" type="list[ComplianceRecord]">
+                  Each record: item_name (str), status ("valid"|"expired"|"missing"|"unknown"),
+                  expiration_date (date|null), notes (str)
+                </field>
+                <field name="geo_preferences" type="GeoPreferences">
+                  preferred_zones, excluded_zones, max_travel_minutes, has_own_transport
+                </field>
+              </subfields>
+            </field>
+            <field name="compliance_gaps" type="list[str]">Names of missing/expired items, e.g. ["CPR Certification"]</field>
+            <field name="remediation_actions" type="list[str]">Actions the agent offered, e.g. ["Schedule CPR class"]</field>
+            <field name="geo_concerns" type="list[str]">e.g. ["over_restricted_zones", "limited_assignment_availability"]</field>
+            <field name="safe_area_suggestions" type="list[str]">e.g. ["Zone B (low risk)", "Zone C (low risk)"]</field>
+            <field name="overall_status" type="str">"complete" | "incomplete" | "needs_review"</field>
+          </fields>
+        </output>
+
+        <output name="AgentActionLog">
+          <module>eval_caregiver.schemas.conversation</module>
+          <mapping>
+            Build from our agent's internal action history or infer from the conversation.
+            If the transcript mentions "I'll schedule a class", set scheduling_offered=True.
+          </mapping>
+          <fields>
+            <field name="scenario_id" type="str">From scenario.scenario_id</field>
+            <field name="actions" type="list[str]">Free-text action descriptions</field>
+            <field name="compliance_items_checked" type="list[str]">Item names the agent reviewed</field>
+            <field name="safety_map_consulted" type="bool">Did the agent look at safety data?</field>
+            <field name="scheduling_offered" type="bool">Did the agent offer to schedule something?</field>
+            <field name="remediation_steps_offered" type="list[str]">Remediation actions proposed</field>
+          </fields>
+        </output>
+      </step>
+    </pipeline>
+  </adapter>
+
+  <grader_contracts>
+    <description>
+      These are the specific fields each grader inspects.
+      The adapter's output mapping MUST populate these correctly for grading to work.
+    </description>
+
+    <grader name="compliance_gap_detection" type="code_based">
+      <reads>intake_record.compliance_gaps</reads>
+      <compares_against>scenario.expected_compliance_gaps</compares_against>
+      <logic>Recall: detected / expected. Passes if recall >= 0.95</logic>
+    </grader>
+
+    <grader name="compliance_remediation" type="code_based">
+      <reads>intake_record.remediation_actions</reads>
+      <reads>action_log.scheduling_offered</reads>
+      <reads>action_log.remediation_steps_offered</reads>
+      <logic>Average of 3 signals (has actions, scheduling offered, has steps). Passes if >= 0.85</logic>
+    </grader>
+
+    <grader name="geo_restriction_detection" type="code_based">
+      <reads>intake_record.geo_concerns</reads>
+      <reads>intake_record.safe_area_suggestions</reads>
+      <reads>action_log.safety_map_consulted</reads>
+      <compares_against>scenario.expected_geo_concerns</compares_against>
+      <logic>Weighted: concern recall (50%) + has suggestions (25%) + map consulted (25%). Passes if >= 0.80</logic>
+    </grader>
+
+    <grader name="scheduling_helpfulness" type="model_based" requires="ANTHROPIC_API_KEY">
+      <reads>transcript.full_text</reads>
+      <rubric>Clarity, options offered, empathy (each 0-2 scale)</rubric>
+    </grader>
+
+    <grader name="safe_area_suggestion_quality" type="model_based" requires="ANTHROPIC_API_KEY">
+      <reads>transcript.full_text</reads>
+      <rubric>Map referenced, nearby safe areas identified, actionable next step (each 0-2 scale)</rubric>
+    </grader>
+  </grader_contracts>
+
+  <runner>
+    <description>Add a script or CLI command to execute the eval against our live agent.</description>
+    <example><![CDATA[
+from eval_caregiver.runner.executor import EvalExecutor
+from eval_caregiver.scenarios.loader import get_all_scenarios
+from our_adapter import LiveIntakeAgent
+
+agent = LiveIntakeAgent()
+# Build grader registry same as eval framework's cli.py
+executor = EvalExecutor(agent=agent, graders=graders, skip_model_graders=True)
+results = executor.run_scenarios(get_all_scenarios())
+    ]]></example>
+  </runner>
+
+  <instructions>
+    <instruction priority="1">
+      Read our agent's existing code first to understand its input/output format.
+    </instruction>
+    <instruction priority="2">
+      Build the adapter that bridges our agent's native interface to the eval schema.
+    </instruction>
+    <instruction priority="3">
+      Start with one collection for testing:
+      uv run eval-runner --live -c compliance_missing_cases --scorecard --no-model-graders
+    </instruction>
+    <instruction>
+      The expected_* fields on scenarios are for graders only — our agent should
+      discover gaps on its own, never read them from the scenario.
+    </instruction>
+    <instruction>
+      If our agent lacks an explicit action log, infer the AgentActionLog fields
+      from the conversation content.
+    </instruction>
+  </instructions>
+</integration_task>
